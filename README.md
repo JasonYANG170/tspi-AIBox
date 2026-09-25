@@ -9,8 +9,8 @@
 在仓库的 **Actions → Build TaishanPi image → Run workflow** 手动运行，或向 `main` 推送相关文件。成功后下载 `tspi-aibox-armbian-6.1.157` artifact，解压其中的 `.img.zst`，再执行：
 
 ```sh
-zstd -d tspi-AIBox_lckfb-tspi_resolute_6.1.157_YYYYMMDD.img.zst
 sha256sum -c tspi-AIBox_lckfb-tspi_resolute_6.1.157_YYYYMMDD.img.zst.sha256
+zstd -d tspi-AIBox_lckfb-tspi_resolute_6.1.157_YYYYMMDD.img.zst
 # 核对目标设备路径后刷写；本命令会覆盖整张卡
 sudo dd if=tspi-AIBox_lckfb-tspi_resolute_6.1.157_YYYYMMDD.img of=/dev/目标设备 bs=4M status=progress conv=fsync
 ```
