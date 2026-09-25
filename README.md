@@ -4,6 +4,23 @@
 
 镜像预装离线语音助手、SSD1306 OLED / 三键菜单 / LED PWM 功能、RKNPU SenseVoice 中文识别、CPU 备用识别、小雅中文 TTS、Ollama Qwen3 0.6B 与 1.7B。NPU 只用于语音识别。生成过程固定下载文件的 SHA256；镜像不包含 Wi-Fi 密码、SSH 私钥或板上的个人配置。
 
+## 在现有 Armbian 上一键部署
+
+适用于使用 `rk3566-taishanpi-v10.dtb`、Ubuntu 26.04 `resolute` 的 ARM64 泰山派；无需刷写镜像。板子联网后执行：
+
+```sh
+git clone https://github.com/JasonYANG170/tspi-AIBox.git
+cd tspi-AIBox
+sudo bash install.sh
+```
+
+脚本安装缺失依赖与模型、运行应用测试、启用并启动 `ollama` 和 `ai` 服务。下载文件逐一校验 SHA256；再次运行会复用已有模型。现有的 `/var/lib/eda-aibox/settings.json`、`led.json`、ASR/TTS 后端选择及 Ollama 模型都会保留；更新前的代码和服务文件保存在 `/opt/eda-aibox/backups/`。若首次启用 LED 覆盖层，重启后硬件 PWM 才会生效。部署后检查：
+
+```sh
+systemctl status ai ollama
+journalctl -u ai -n 50 --no-pager
+```
+
 ## CI 构建与刷写
 
 在仓库的 **Actions → Build TaishanPi image → Run workflow** 手动运行，或向 `main` 推送相关文件。成功后下载 `tspi-aibox-armbian-6.1.157` artifact，解压其中的 `.img.zst`，再执行：
