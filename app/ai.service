@@ -1,0 +1,28 @@
+[Unit]
+Description=TaishanPi Offline Voice Assistant
+After=ollama.service sound.target
+Wants=ollama.service
+
+[Service]
+Type=simple
+User=yang
+Group=yang
+SupplementaryGroups=audio render i2c
+StateDirectory=eda-aibox
+WorkingDirectory=/opt/eda-aibox
+Environment=PYTHONUNBUFFERED=1
+Environment=LD_LIBRARY_PATH=/opt/eda-aibox/lib
+Environment=EDA_LLM_MODEL=qwen3:1.7b-q4_K_M
+ExecStartPre=/usr/bin/test -e /dev/snd/pcmC1D0c
+ExecStartPre=/usr/bin/test -f /opt/eda-aibox/models/vits-icefall-zh-aishell3/model.onnx
+ExecStartPre=/usr/bin/amixer -q -c 1 sset "Capture MIC Path" "Main Mic"
+ExecStartPre=/usr/bin/amixer -q -c 1 sset "Playback Path" SPK
+ExecStartPre=/usr/bin/amixer -q -c 1 sset DAC 250
+ExecStartPre=+/opt/eda-aibox/venv/bin/python /opt/eda-aibox/setup_led_pwm.py
+ExecStart=/opt/eda-aibox/venv/bin/python /opt/eda-aibox/ai.py
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

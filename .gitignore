@@ -1,0 +1,8 @@
+*.img
+*.img.gz
+*.img.zst
+*.tar.*
+*.log
+__pycache__/
+.cache/
+out/

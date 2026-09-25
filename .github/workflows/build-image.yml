@@ -1,0 +1,39 @@
+name: Build TaishanPi image
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/build-image.yml
+      - scripts/**
+      - app/**
+      - requirements-arm64.txt
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    runs-on: ubuntu-26.04-arm
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install image tools
+        run: sudo apt-get update && sudo apt-get install -y gdisk parted e2fsprogs zstd bzip2 curl device-tree-compiler
+      - name: Build image
+        run: sudo bash scripts/build-image.sh
+      - name: Validate output
+        run: |
+          cd out
+          sha256sum -c *.sha256
+          test "$(find . -maxdepth 1 -name '*.img.zst' | wc -l)" -eq 1
+      - name: Upload flashable image
+        uses: actions/upload-artifact@v4
+        with:
+          name: tspi-aibox-armbian-6.1.157
+          path: |
+            out/*.img.zst
+            out/*.sha256
+          if-no-files-found: error
+          retention-days: 7
