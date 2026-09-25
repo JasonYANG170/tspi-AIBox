@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
+export LD_LIBRARY_PATH=/opt/eda-aibox/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 apt-get update
 apt-get install -y --no-install-recommends python3-venv python3-pip alsa-utils gpiod i2c-tools fonts-noto-cjk ca-certificates curl libatomic1 libgomp1
 
