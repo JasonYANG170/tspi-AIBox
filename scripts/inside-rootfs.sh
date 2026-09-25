@@ -9,6 +9,7 @@ if ! id yang >/dev/null 2>&1; then useradd -m -s /bin/bash yang; fi
 if ! id ollama >/dev/null 2>&1; then useradd -r -m -d /usr/share/ollama -s /usr/sbin/nologin ollama; fi
 usermod -aG audio,render,i2c yang
 install -d -o ollama -g ollama /usr/share/ollama/.ollama/models
+chown -R ollama:ollama /usr/share/ollama/.ollama
 chown -R yang:yang /opt/eda-aibox
 
 python3 -m venv /opt/eda-aibox/venv
@@ -37,4 +38,5 @@ runuser -u ollama -- env OLLAMA_HOST="$OLLAMA_HOST" OLLAMA_MODELS="$OLLAMA_MODEL
 runuser -u ollama -- env OLLAMA_HOST="$OLLAMA_HOST" OLLAMA_MODELS="$OLLAMA_MODELS" /usr/bin/ollama pull qwen3:1.7b-q4_K_M
 /usr/bin/ollama show qwen3:0.6b >/dev/null
 /usr/bin/ollama show qwen3:1.7b-q4_K_M >/dev/null
+rm -f /usr/share/ollama/.ollama/id_ed25519 /usr/share/ollama/.ollama/id_ed25519.pub
 echo 'Both Ollama models installed'
