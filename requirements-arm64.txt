@@ -1,0 +1,7 @@
+cbor2==6.1.4
+luma.core==2.6.0
+luma.oled==3.15.0
+numpy==2.5.3
+pillow==12.3.0
+smbus2==0.6.1
+sherpa_onnx @ https://hf-mirror.com/csukuangfj2/sherpa-onnx-wheels/resolve/main/rknn/1.13.8/sherpa_onnx-1.13.8-cp314-cp314-manylinux_2_27_aarch64.whl#sha256=203961b69eb892e46e4f379b3e8d56004d29c616fca9514d3204114f6ece3726

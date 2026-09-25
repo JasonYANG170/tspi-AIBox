@@ -1,0 +1,1 @@
+KERNEL=="gpiochip3", GROUP="yang", MODE="0660"
