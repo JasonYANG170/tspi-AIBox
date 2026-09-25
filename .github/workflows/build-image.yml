@@ -41,6 +41,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          sudo rm -f .cache/image-build/tspi-AIBox_6.1.157.img
+          sudo chown -R "$USER:$USER" out
+          df -h out
           image=$(find out -maxdepth 1 -name '*.img.zst' -print -quit)
           test -n "$image"
           # GitHub Releases limits each asset to less than 2 GiB.
