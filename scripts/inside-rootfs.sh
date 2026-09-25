@@ -24,11 +24,15 @@ runuser -u ollama -- env OLLAMA_HOST="$OLLAMA_HOST" OLLAMA_MODELS="$OLLAMA_MODEL
 server_pid=$!
 cleanup() { kill "$server_pid" 2>/dev/null || true; wait "$server_pid" 2>/dev/null || true; }
 trap cleanup EXIT
-for attempt in $(seq 1 60); do
+for attempt in $(seq 1 15); do
     if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then break; fi
+    if ! kill -0 "$server_pid" 2>/dev/null; then break; fi
     sleep 1
 done
-curl -fsS http://127.0.0.1:11434/api/tags >/dev/null
+if ! curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
+    cat /tmp/ollama-build.log >&2
+    exit 1
+fi
 runuser -u ollama -- env OLLAMA_HOST="$OLLAMA_HOST" OLLAMA_MODELS="$OLLAMA_MODELS" /usr/bin/ollama pull qwen3:0.6b
 runuser -u ollama -- env OLLAMA_HOST="$OLLAMA_HOST" OLLAMA_MODELS="$OLLAMA_MODELS" /usr/bin/ollama pull qwen3:1.7b-q4_K_M
 /usr/bin/ollama show qwen3:0.6b >/dev/null
