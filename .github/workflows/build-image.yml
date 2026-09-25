@@ -11,7 +11,7 @@ on:
       - requirements-arm64.txt
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   image:
@@ -37,3 +37,29 @@ jobs:
             out/*.sha256
           if-no-files-found: error
           retention-days: 7
+      - name: Split image for GitHub Releases
+        shell: bash
+        run: |
+          set -euo pipefail
+          image=$(find out -maxdepth 1 -name '*.img.zst' -print -quit)
+          test -n "$image"
+          # GitHub Releases limits each asset to less than 2 GiB.
+          split -b 1900M -d -a 2 "$image" "$image.part-"
+          test -s "$image.part-00"
+          cat > out/REASSEMBLE.txt <<EOF
+          Download all $(basename "$image").part-* files and $(basename "$image").sha256.
+          Reassemble and verify on Linux/macOS:
+            cat $(basename "$image").part-* > $(basename "$image")
+            sha256sum -c $(basename "$image").sha256
+          EOF
+      - name: Publish image to GitHub Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "ci-${{ github.run_number }}-${{ github.run_attempt }}" \
+            out/*.img.zst.part-* out/*.sha256 out/REASSEMBLE.txt \
+            --target "$GITHUB_SHA" \
+            --title "TaishanPi image build #${{ github.run_number }}" \
+            --notes-file out/REASSEMBLE.txt \
+            --prerelease
