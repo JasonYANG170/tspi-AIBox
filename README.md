@@ -4,6 +4,14 @@
 
 镜像预装离线语音助手、SSD1306 OLED / 三键菜单 / LED PWM 功能、RKNPU SenseVoice 中文识别、CPU 备用识别、小雅中文 TTS、Ollama Qwen3 0.6B 与 1.7B。NPU 只用于语音识别。生成过程固定下载文件的 SHA256；镜像不包含 Wi-Fi 密码、SSH 私钥或板上的个人配置。
 
+## 硬件实物
+
+![泰山派 RK3566 AIBox 实物](docs/images/project-hardware.webp)
+
+图片展示 AIBox 硬件实物；来源页面的软件介绍为早期版本，当前固件功能以本仓库说明为准。
+
+[硬件项目与图片来源](https://oshwhub.com/course-examples/ai-rk3566)
+
 ## 在现有 Armbian 上一键部署
 
 适用于使用 `rk3566-taishanpi-v10.dtb`、Ubuntu 26.04 `resolute` 的 ARM64 泰山派；无需刷写镜像。板子联网后执行：
