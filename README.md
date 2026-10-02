@@ -1,3 +1,5 @@
+[简体中文](README.md) | [English](README_en.md)
+
 # 泰山派 AIBox 固件
 
 本仓库的 [GitHub Actions](.github/workflows/build-image.yml) 从 [ophub 的 lckfb-tspi Armbian 镜像](https://github.com/ophub/amlogic-s9xxx-armbian/releases/tag/Armbian_resolute_arm64_server_2026.09) 制作可刷写镜像。基底固定为 `Armbian_26.11.0_rockchip_lckfb-tspi_resolute_6.1.157_server_2026.09.01.img.gz`（SHA256 `247d8aad854c3bd0d9ba2fd755678967a6f7e59e91b89e1d331fae4f8bba01e6`），与已运行的泰山派内核和设备树一致。构建不会重新编译内核，也不引入上游后续可能变动的设备树。
